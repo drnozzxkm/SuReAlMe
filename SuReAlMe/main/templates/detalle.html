@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ subtema }} - {{ curso }}</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <span class="project-name">Superando Retos, Alcanzando Metas</span>
+    <div class="nav-right">
+      <div class="user-menu">
+        <a href="{% url 'home' %}" class="nav-link">Inicio</a>
+        <a href="{% url 'comentarios' %}" class="nav-link">Comentarios</a>
+        <a href="{% url 'cuenta' %}" class="user-name">{{ request.user.username }}</a>
+        <a href="{% url 'logout' %}" class="logout-btn">Salir</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== CONTENIDO PRINCIPAL ===== -->
+  <main class="site-content">
+    <section class="courses">
+      <h2>{{ curso }} → {{ tema }} → {{ subtema }}</h2>
+
+      <div class="video-container">
+      <iframe width="800" height="450"
+                src="{{ video_url }}"
+                title="Video educativo sobre {{ subtema }}"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+        </iframe>
+      </div>
+  </iframe>
+</div>
+
+<p class="explicacion">
+  {{ explicacion }}
+</p>
+</body>
+</html>

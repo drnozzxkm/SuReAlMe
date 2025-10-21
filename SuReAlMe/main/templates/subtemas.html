@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ tema }} - Subtemas</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <header class="navbar">
+    <span class="project-name">Superando Retos, Alcanzando Metas</span>
+    <div class="nav-right">
+      <div class="user-menu">
+        <a href="{% url 'home' %}" class="nav-link">Inicio</a>
+        <a href="{% url 'comentarios' %}" class="nav-link">Comentarios</a>
+        <a href="{% url 'cuenta' %}" class="user-name">{{ request.user.username }}</a>
+        <a href="{% url 'logout' %}" class="logout-btn">Salir</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="courses">
+    <h2>{{ tema }} - Subtemas</h2>
+    <div class="grid">
+      {% for subtema in subtemas %}
+      <div class="card">
+        <a href="{% url 'detalle' curso tema.nombre subtema.nombre %}" class="card-link">{{ subtema.nombre }}</a>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if tema.encuesta %}
+      <div style="margin-top: 60px; text-align:center;">
+        <a href="{% url 'encuesta' curso tema.nombre %}" class="btn-encuesta">Empezar encuesta</a>
+      </div>
+    {% endif %}
+  </section>
+</body>
+</html>

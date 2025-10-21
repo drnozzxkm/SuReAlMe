@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ encuesta.titulo }}</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <header class="navbar">
+    <span class="project-name">Superando Retos, Alcanzando Metas</span>
+    <div class="nav-right">
+      <div class="user-menu">
+        <a href="{% url 'home' %}" class="nav-link">Inicio</a>
+        <a href="{% url 'comentarios' %}" class="nav-link">Comentarios</a>
+        <a href="{% url 'cuenta' %}" class="user-name">{{ request.user.username }}</a>
+        <a href="{% url 'logout' %}" class="logout-btn">Salir</a>
+      </div>
+    </div>
+  </header>
+
+<section class="encuesta-page">
+  <div class="encuesta-header">
+    <h1 class="encuesta-title">{{ encuesta.titulo }}</h1>
+    <p class="encuesta-desc">{{ encuesta.descripcion }}</p>
+  </div>
+
+  <div class="encuesta-body">
+    {% for p in preguntas %}
+      <div class="pregunta {% if forloop.first %}active{% endif %}" data-index="{{ forloop.counter0 }}">
+        <h3>{{ p.texto }}</h3>
+
+        <div class="opciones-grid">
+          <div class="opcion" data-correcta="{% if p.opcion1 == p.respuesta_correcta %}1{% else %}0{% endif %}">{{ p.opcion1 }}</div>
+          <div class="opcion" data-correcta="{% if p.opcion2 == p.respuesta_correcta %}1{% else %}0{% endif %}">{{ p.opcion2 }}</div>
+          <div class="opcion" data-correcta="{% if p.opcion3 == p.respuesta_correcta %}1{% else %}0{% endif %}">{{ p.opcion3 }}</div>
+          <div class="opcion" data-correcta="{% if p.opcion4 == p.respuesta_correcta %}1{% else %}0{% endif %}">{{ p.opcion4 }}</div>
+        </div>
+
+        <button class="btn-siguiente" style="display:none;">Siguiente</button>
+      </div>
+    {% endfor %}
+
+    <div class="resultado" style="display:none;">
+      <h3>¡Resultados!</h3>
+      <p id="resultado-texto"></p>
+    </div>
+  </div>
+</section>
+
+  <script>
+    const preguntas = document.querySelectorAll(".pregunta");
+    let indice = 0;
+    let correctas = 0;
+
+    preguntas.forEach(p => {
+      const opciones = p.querySelectorAll(".opcion");
+      const btn = p.querySelector(".btn-siguiente");
+
+      opciones.forEach(op => {
+        op.addEventListener("click", () => {
+          if (op.dataset.correcta === "1") {
+            op.classList.add("correcta");
+            correctas++;
+          } else {
+            op.classList.add("incorrecta");
+            p.querySelectorAll(".opcion").forEach(o => {
+              if (o.dataset.correcta === "1") o.classList.add("correcta");
+            });
+          }
+          opciones.forEach(o => o.style.pointerEvents = "none");
+          btn.style.display = "inline-block";
+        });
+      });
+
+      btn.addEventListener("click", () => {
+        p.classList.remove("active");
+        indice++;
+        if (indice < preguntas.length) {
+          preguntas[indice].classList.add("active");
+        } else {
+          document.querySelector(".resultado").style.display = "block";
+          const texto = document.getElementById("resultado-texto");
+          texto.innerText = `Respondiste correctamente ${correctas} de ${preguntas.length} preguntas.`;
+          if (correctas >= 8) texto.innerText += " ¡Excelente trabajo! 🎉";
+          else if (correctas >= 5) texto.innerText += " ¡Vas por buen camino! 💪";
+          else texto.innerText += " ¡No te rindas, sigue practicando! 🔁";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

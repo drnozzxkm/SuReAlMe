@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ curso }} - Temas disponibles</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <!-- ===== Barra (misma estructura que en home) ===== -->
+  <header class="navbar">
+    <span class="project-name">Superando Retos, Alcanzando Metas</span>
+      <div class="nav-right">
+        <div class="user-menu">
+          <a href="{% url 'home' %}" class="nav-link">Inicio</a>
+          <a href="{% url 'comentarios' %}" class="nav-link">Comentarios</a>
+          <a href="{% url 'cuenta' %}" class="user-name">{{ request.user.username }}</a>
+          <a href="{% url 'logout' %}" class="logout-btn">Salir</a>
+      </div>
+  </header>
+
+  <!-- ===== CONTENIDO (añadimos wrapper con padding-top para compensar navbar fijo) ===== -->
+  <main class="site-content">
+    <section class="courses">
+      <h2>Temas disponibles de {{ curso }}</h2>
+      <div class="grid">
+        {% for tema in temas %}
+        <a href="{% url 'subtemas' curso.nombre tema.nombre %}" class="card">
+             {{ tema.nombre }}
+        </a>    
+        {% empty %}
+          <p>No hay temas disponibles para este curso.</p>
+        {% endfor %}
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Superando Retos, Alcanzando Metas</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <!-- ===== Barra fija superior ===== -->
+  <header class="navbar">
+    <span class="project-name">Superando Retos, Alcanzando Metas</span>
+      <div class="nav-right">
+        <div class="user-menu">
+          <a href="{% url 'comentarios' %}" class="nav-link">Comentarios</a>
+          <a href="{% url 'cuenta' %}" class="user-name">{{ request.user.username }}</a>
+          <a href="{% url 'logout' %}" class="logout-btn">Salir</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Pantalla 1: presentación ===== -->
+  <section class="hero" id="inicio">
+    <div class="hero-content">
+      <h1>Superando Retos, Alcanzando Metas</h1>
+      <p>Un espacio creado para apoyar a los estudiantes en sus talleres de recuperación, reforzando conocimientos y alcanzando nuevas metas.</p>
+      <div class="buttons">
+        <button onclick="scrollToSection('cursos')">Ver cursos</button>
+        <button onclick="scrollToSection('libros')">Ver libros de trabajo</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Pantalla 2: cursos ===== -->
+  <section class="courses" id="cursos">
+    <h2>Cursos disponibles</h2>
+    <div class="grid">
+      {% for curso in cursos %}
+      <a href="{% url 'temas' curso.nombre %}" class="card">
+        {{ curso.nombre }}<br>
+        <small>{{ curso.descripcion }}</small>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ===== Pantalla 3: libros ===== -->
+  <section class="books" id="libros">
+    <h2>Libros de trabajo</h2>
+    <div class="grid">
+      <div class="card">Libro de Matemática</div>
+      <div class="card">Libro de Comunicación</div>
+      <div class="card">Libro de Ciencia y Tecnología</div>
+      <div class="card">Libro de DPCC</div>
+      <div class="card">Libro de Ciencias Sociales</div>
+    </div>
+  </section>
+
+  <script>
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+
+  <h2> I.E. 2053 Francisco Bolognesi Cervantes</h2>
+</body>
+</html>
+

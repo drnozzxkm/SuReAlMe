@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Comentarios de la comunidad</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <span class="project-name">Superando Retos, Alcanzando Metas</span>
+    <div class="nav-right">
+      <div class="user-menu">
+        <a href="{% url 'home' %}" class="nav-link">Inicio</a>
+        <a href="{% url 'cuenta' %}" class="user-name">{{ request.user.username }}</a>
+        <a href="{% url 'logout' %}" class="logout-btn">Salir</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECCIÓN DE COMENTARIOS -->
+  <section class="comments-section">
+    <div class="comments-container">
+      <h2>Comentarios de la comunidad educativa</h2>
+
+      <!-- FORMULARIO DE COMENTARIOS -->
+      <form method="POST" class="comment-form">
+        {% csrf_token %}
+        <textarea 
+          name="texto" 
+          placeholder="Escribe aquí tu comentario..." 
+          required
+        ></textarea>
+        <button type="submit" class="btn-comentar">Publicar comentario</button>
+      </form>
+
+      <!-- MENSAJES DE ESTADO -->
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <!-- LISTA DE COMENTARIOS -->
+      <div class="comment-list">
+        {% for c in comentarios %}
+          <div class="comment-item">
+            <div class="comment-avatar">
+              {% if c.usuario.foto_perfil %}
+                <img src="{{ c.usuario.foto_perfil.url }}" alt="Foto de {{ c.usuario.username }}">
+              {% else %}
+                <img src="{% static 'img/default_profile.png' %}" alt="Foto por defecto">
+              {% endif %}
+            </div>
+
+            <div class="comment-body">
+              <div class="comment-header">
+                <span class="comment-name">{{ c.usuario.username }}</span>
+                <span class="comment-role">({{ c.usuario.rol|capfirst }})</span>
+                <span class="comment-date">{{ c.fecha|date:"d/m/Y H:i" }}</span>
+              </div>
+              <p class="comment-text">{{ c.contenido }}</p>
+            </div>
+          </div>
+        {% empty %}
+          <p class="no-comments">Aún no hay comentarios. ¡Sé el primero en escribir uno!</p>
+        {% endfor %}
+      </div>    
+    </div>
+  </section>
+</body>
+</html>
